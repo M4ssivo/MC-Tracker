@@ -1,1 +1,96 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --white: #fff;
+    --black: #000;
+    --rich-black: #101014ff;
+    --eerie-black: #212224ff;
+    --metro-black: #474761;
+    --text: #B0B3B8;
+    --dark-text: #767D88;
+    --description-text: var(--metro-black);
+    --main: #9d7bf6;
+    --main-dark: #7e137c;
+    --background: #0c0c0fff;
+    --footer: var(--rich-black);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppings', sans-serif;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--background);
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+}
+
+/* -- MAIN SECTION -- */
+.main-section {
+    height: auto;
+    width: 100%;
+    position: relative;
+    min-height: calc(100vh - 111px);
+    background-color: var(--background);
+    overflow: hidden;
+    padding-bottom: 50px;
+}
+
+.container {
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@keyframes title-animation-glitch {
+	0% {
+		text-shadow: none
+	}
+	25% {
+		text-shadow: -2px -2px 0 #eb055a, 2px 2px 0 #4632f0
+	}
+	50% {
+		text-shadow: 2px -2px 0 #eb055a, -2px 2px 0 #4632f0
+	}
+	75% {
+		text-shadow: -2px 2px 0 #eb055a, 2px -2px 0 #4632f0
+	}
+	100% {
+		text-shadow: 2px 2px 0 #eb055a, -2px -2px 0 #4632f0
+	}
+}
+
+/* ----- FOOTER ----- */
+.footer {
+    position: absolute;
+    bottom: 0;
+    font-size: 14px;
+    width: 100%;
+    background-color: var(--footer);
+    padding: 46px 150px;
+    color: var(--text);
+    display: inline-block;
+    border-top: 3px solid var(--main);
+    transition: all .5s cubic-bezier(.685,.0473,.346,1);
+}
+
+.footer a {
+    color: var(--main);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    filter: brightness(70%);
+}
