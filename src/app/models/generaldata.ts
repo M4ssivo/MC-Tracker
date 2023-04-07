@@ -20,5 +20,5 @@ export interface GeneralData {
         Skins: string
     },
     servers: ServerData[],
-    timestampPoints: []
+    timestampPoints: number[]
 }

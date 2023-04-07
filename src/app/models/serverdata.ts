@@ -5,7 +5,7 @@ export interface ServerData {
         timestamp: number
     },
     playerCount: number,
-    playerCountHistory: [],
+    playerCountHistory: number[],
     recordData: {
         playerCount: number,
         timestamp: number

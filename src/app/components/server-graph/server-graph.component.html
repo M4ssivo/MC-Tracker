@@ -2,8 +2,19 @@
 
     <div class="server-graph" *ngFor="let server of data.servers; index as i">
             <div class="server-icon">
-                <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="SagePvP sagepvp.org" *ngIf="server.favicon">
-                <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="SagePvP sagepvp.org" *ngIf="!server.favicon">
+
+                <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="
+                {{ data.config.servers[i].name }}
+                {{ data.config.servers[i].ip }}
+                "
+                *ngIf="server.favicon">
+
+                <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="
+                {{ data.config.servers[i].name }}
+                {{ data.config.servers[i].ip }}
+                "
+                *ngIf="!server.favicon">
+                
                 <span class="rank">#1</span>
             </div>
 

@@ -41,11 +41,33 @@ export class ServerGraphComponent {
       next: data => {
         if(data.message == 'init') {
           this.data = data;
+        } else if(data.message == 'updateServers') {
+
+          this.data.timestampPoints.shift();
+          this.data.timestampPoints.push(data.timestamp);
+
+          for(let i = 1; i < data.updates.length; i++) {
+            this.handleServerUpdate(data, this.data.servers[i], i);
+          }
+
         }
       }, error: err => {
         console.log(err);
       }
     });
+  }
+
+  handleServerUpdate(data: any, server: ServerData, server_id: number) {
+    server.playerCount = data.updates[server_id].playerCount;
+
+    if(server.graphPeakData) { // check peak is not null
+      if(server.playerCount > server.graphPeakData.playerCount) { // check if 24h peak is passed and set new record
+        server.graphPeakData.playerCount = server.playerCount;
+      }
+    }
+
+    server.playerCountHistory.shift();
+    server.playerCountHistory.push(data.updates[server_id].playerCount);
   }
 
   getDataSet(server: ServerData) {
