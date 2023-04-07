@@ -13,7 +13,7 @@ export class WebSocketService {
 
   _address: string = 'wss://masivo.cc'
   _reconnectDelayBase = 0;
-  _caption = 'Loading...';
+  _message = 'Loading...';
 
   public messages$: Subject<any> = new Subject<any>();
 
@@ -46,17 +46,14 @@ export class WebSocketService {
       // Clamp ceiling value to 30 seconds
       let _reconnectDelaySeconds = Math.min((this._reconnectDelayBase * this._reconnectDelayBase), 30);
 
-      this._caption = `Reconnecting in ${_reconnectDelaySeconds}s...`; // Update displayed text
-
-      console.log(this._caption);
+      this.handleOverlayText(_reconnectDelaySeconds);
 
       return timer(_reconnectDelaySeconds * 1000);
     });
 
-    this._caption = 'Reconnecting...'; // Update displayed text
-
     const openObserver = new Subject<Event>();
     openObserver.pipe(map((_) => true)).subscribe(this.status$);
+    
     const closeObserver = new Subject<CloseEvent>();
     closeObserver.pipe(map((_) => false)).subscribe(this.status$);
 
@@ -67,6 +64,25 @@ export class WebSocketService {
     });
 
     this.ws.pipe(retryWhen((errs) => errs.pipe(retryConnection, repeat()))).subscribe(this.messages$);
+  }
+
+  handleOverlayText(_reconnectDelaySeconds: number) {
+    const reconnectInterval = setInterval(() => {
+      _reconnectDelaySeconds--
+
+      if (_reconnectDelaySeconds === 0) {
+        // Explicitly clear interval, this avoids race conditions
+        // #clearInterval first to avoid potential errors causing pre-mature returns
+        clearInterval(reconnectInterval)
+
+        // Update displayed text
+        this._message = 'Reconnecting...';
+
+      } else if (_reconnectDelaySeconds > 0) {
+        // Update displayed text
+        this._message = `Reconnecting in ${_reconnectDelaySeconds}s...`; // Update displayed text
+      }
+    }, 1000)
   }
 
   message(message: any) {
