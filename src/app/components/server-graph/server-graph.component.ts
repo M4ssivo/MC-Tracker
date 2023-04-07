@@ -13,6 +13,7 @@ import { WebSocketService } from 'src/app/services/websocket.service';
 export class ServerGraphComponent {
 
   data!: GeneralData;
+  timestamps: number[] = [];
 
   public options: ChartOptions<'line'> = {
     spanGaps: true,
@@ -39,19 +40,33 @@ export class ServerGraphComponent {
   ngOnInit() {
     this.webSocketService.messages$.subscribe(data => {
       if(data.message == 'init') {
+
+        if(this.timestamps.length > 1) return; // check if timestamps is already loaded
+
         this.data = data;
 
         this.data.servers.map((server, index) => (server.server_id = index)); // handle servers id
 
-        this.data.timestampPoints = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
+        this.timestamps = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
       } else if(data.message == 'updateServers') {
 
-        this.data.timestampPoints.shift();
-        this.data.timestampPoints.push(data.timestamp * 1000);
+        if(!data) { // check if has any data
+          return;
+        }
+
+        this.timestamps.shift();
+        this.timestamps.push(data.timestamp * 1000);
 
         for(let i = 1; i < data.updates.length; i++) {
           this.handleServerUpdate(data, this.data.servers[i], i);
         }
+      }
+    });
+
+    this.webSocketService.connectionStatus$().subscribe(status => {
+      if(!status) {
+        this.data = undefined as any;
+        this.timestamps = [];
       }
     });
   }
@@ -85,7 +100,7 @@ export class ServerGraphComponent {
 
   getDataSet(server: ServerData) {
     return {
-      labels: this.data.timestampPoints,
+      labels: this.timestamps,
       datasets: [
         {
           data: server.playerCountHistory,

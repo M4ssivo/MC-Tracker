@@ -34,7 +34,7 @@ export class WebSocketService {
 
   private create() {
     if (this.ws) {
-      this.ws.unsubscribe()
+      //this.ws.unsubscribe();
     }
 
     const retryConnection = switchMap(() => {

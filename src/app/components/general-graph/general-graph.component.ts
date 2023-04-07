@@ -39,6 +39,14 @@ export class GeneralGraphComponent {
         this.handleUpdate(data)
       }
     });
+
+    this.webSocketService.connectionStatus$().subscribe(status => {
+      if(!status) {
+        this.generalData = undefined as any;
+        this.historyGraph = undefined as any;
+        this.initialized = false;
+      }
+    });
   }
 
   handleCreateChart() {
@@ -99,11 +107,18 @@ export class GeneralGraphComponent {
     this.chart.data.datasets = dataset;
     this.chart.data.labels = date;
     this.chart.update();
+
+    this.initialized = true;
   }
 
   handleUpdate(data: any) {
+
+    if(!this.generalData && !this.historyGraph && !this.initialized) {
+      return;
+    }
+
     this.chart.data.labels.shift();
-    this.chart.data.labels.push(data.timestamp * 1000);
+    this.chart.data.labels.push(moment(data.timestamp * 1000).toString());
 
     for(let i = 1; i < data.updates.length; i++) {
       this.chart.data.datasets[i].data.shift();
