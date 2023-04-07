@@ -35,6 +35,8 @@ export class GeneralGraphComponent {
       } else if(data.message == 'historyGraph') {
         this.historyGraph = data;
         this.handleHistoryGraph();
+      } else if(data.message == 'updateServers') {
+        this.handleUpdate(data)
       }
     });
   }
@@ -96,6 +98,17 @@ export class GeneralGraphComponent {
 
     this.chart.data.datasets = dataset;
     this.chart.data.labels = date;
+    this.chart.update();
+  }
+
+  handleUpdate(data: any) {
+    this.chart.data.labels.shift();
+    this.chart.data.labels.push(data.timestamp * 1000);
+
+    for(let i = 1; i < data.updates.length; i++) {
+      this.chart.data.datasets[i].data.shift();
+      this.chart.data.datasets[i].data.push(data.updates[i].playerCount);
+    }
     this.chart.update();
   }
 }
