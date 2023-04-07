@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-moment';
 import * as moment from 'moment';
@@ -71,10 +71,12 @@ export class GeneralGraphComponent {
         fill: true,
         data: this.graphData.graphData[i],
         borderColor: this.generalData.config.servers[i].color,
+        backgroundColor: 'transparent',
         tension: 1,
         pointStyle: 'circle',
         pointRadius: 0,
-        pointHoverRadius: 3
+        pointHoverRadius: 3,
+        pointBackgroundColor: this.generalData.config.servers[i].color
       })
     }
 

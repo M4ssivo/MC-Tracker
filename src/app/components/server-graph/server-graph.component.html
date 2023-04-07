@@ -1,1 +1,34 @@
-<p>server-graph works!</p>
+<div class="servers" *ngIf="data">
+
+    <div class="server-graph" *ngFor="let server of generalData.servers; index as i">
+            <div class="server-icon">
+                <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="SagePvP sagepvp.org" *ngIf="server.favicon">
+                <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="SagePvP sagepvp.org" *ngIf="!server.favicon">
+                <span class="rank">#1</span>
+            </div>
+
+            <div class="server-status" *ngIf="server.playerCount">
+                <h3 class="name">{{ generalData.config.servers[i].name }}</h3>
+                <span class="error" style="display: none;"></span>
+
+                <span class="highlighted-label" style="display: block;" >
+                    Players: <span class="highlighted-value">{{ server.playerCount }}</span>
+                </span>
+
+                <span class="label" style="display: block;" *ngIf="server.graphPeakData.playerCount">
+                    24h Peak: <span class="value" title="At 4:16:04 PM">{{ server.graphPeakData.playerCount }}</span>
+                </span>
+
+                <span class="label" style="display: block;">
+                    Record: <span class="value" title="At 12/24/2021 6:38:29 PM">{{ server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY') }})</span>
+                </span>
+
+                <span class="label" style="display: block;">1.7.2-1.8</span>
+            </div>
+
+            <div class="chart">
+                <canvas baseChart [type]="'line'" [data]="getDataSet(server)" [options]="lineChartOptions" [legend]="false"></canvas>
+            </div>
+
+    </div>
+</div>

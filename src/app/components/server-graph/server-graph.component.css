@@ -1,0 +1,74 @@
+.servers {
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.server-graph {
+    background: var(--rich-black);
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, .1);    
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 0 5px 10px;
+    display: inline-block;
+    width: 670px;
+}
+
+.server-icon {
+    width: 80px;
+    float: left;
+}
+
+.server-icon .icon {
+    --fixed-server-icon-size: 64px;
+    width: var(--fixed-server-icon-size);
+    height: var(--fixed-server-icon-size);
+    border-radius: 1px;
+    margin-top: 5px;
+}
+
+.server-icon .rank {
+    display: block;
+    width: 64px;
+    text-align: center;
+}
+
+.server-status {
+    width: 230px;
+    float: left;
+}
+
+.server-status .name {
+    display: inline-block
+}
+
+.server-status .error {
+    display: none;
+    color: #e74c3c
+}
+
+.server-status .label {
+    display: none
+}
+
+.server-status .label,.server-status .value {
+    color: var(--text);
+    font-size: 16px
+}
+
+.highlighted-label {
+    font-size: 18px
+}
+
+.highlighted-value {
+    font-size: 18px;
+    font-weight: 700
+}
+
+.server-graph .chart {
+    height: 117px;
+    width: 300px;
+    float: left;
+}

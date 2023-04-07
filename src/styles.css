@@ -29,6 +29,10 @@ html {
 body {
     min-height: 100vh;
     background: var(--background);
+
+    font-size: 18px;
+    font-weight: 300;
+    color: #fff;
 }
 
 button {
@@ -73,7 +77,6 @@ button {
 
 /* ----- FOOTER ----- */
 .footer {
-    position: absolute;
     bottom: 0;
     font-size: 14px;
     width: 100%;
