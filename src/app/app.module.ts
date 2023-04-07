@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { GeneralGraphComponent } from './components/general-graph/general-graph.component';
 import { ServerGraphComponent } from './components/server-graph/server-graph.component';
 import { NgChartsModule } from 'ng2-charts';
+import { OverlayComponent } from './components/overlay/overlay.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GeneralGraphComponent,
-    ServerGraphComponent
+    ServerGraphComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,
