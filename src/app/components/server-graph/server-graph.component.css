@@ -72,3 +72,8 @@
     width: 300px;
     float: left;
 }
+
+.server-error {
+    display: block;
+    color: #e74c3c
+}

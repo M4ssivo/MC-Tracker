@@ -41,10 +41,14 @@ export class ServerGraphComponent {
       next: data => {
         if(data.message == 'init') {
           this.data = data;
+
+          this.data.servers.map((server, index) => (server.server_id = index)); // handle servers id
+
+          this.data.timestampPoints = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
         } else if(data.message == 'updateServers') {
 
           this.data.timestampPoints.shift();
-          this.data.timestampPoints.push(data.timestamp);
+          this.data.timestampPoints.push(data.timestamp * 1000);
 
           for(let i = 1; i < data.updates.length; i++) {
             this.handleServerUpdate(data, this.data.servers[i], i);
@@ -58,6 +62,20 @@ export class ServerGraphComponent {
   }
 
   handleServerUpdate(data: any, server: ServerData, server_id: number) {
+
+    // error handler
+    if(data.error) {
+      server.error = data.error.message;
+      return;
+    }
+
+    if(data.updates[server_id].playerCount == null) {
+      server.error = 'Failed to ping';
+      return;
+    }
+
+    server.error = '';
+
     server.playerCount = data.updates[server_id].playerCount;
 
     if(server.graphPeakData) { // check peak is not null
@@ -89,7 +107,23 @@ export class ServerGraphComponent {
     }
   }
 
+  getSortenedByPlayers(servers: ServerData[]) {
+    return [...servers].sort((a, b) => this.getPlayerCount(b.playerCount) - this.getPlayerCount(a.playerCount));
+  }
+
+  getPlayerCount(count: number) {
+    return count == null ? 0 : count;
+  }
+
   handleMoment(time: any, format: string) {
     return moment(time).format(format);
+  }
+
+  isValid(count: number) {
+    return count != null;
+  }
+
+  hasError(server: ServerData) {
+    return server.error && server.error !== '';
   }
 }
