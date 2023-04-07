@@ -4,7 +4,7 @@ import 'chartjs-adapter-moment';
 import * as moment from 'moment';
 import { GeneralData } from 'src/app/models/generaldata';
 import { HistoryGraph } from 'src/app/models/historygraph';
-import { ApiService } from 'src/app/services/api.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-general-graph',
@@ -21,7 +21,7 @@ export class GeneralGraphComponent {
   public chart: any;
 
   constructor(
-    private apiService: ApiService
+    private webSocketService: WebSocketService
   ) {
     Chart.register(...registerables);
   }
@@ -29,17 +29,12 @@ export class GeneralGraphComponent {
   ngOnInit() {
     this.handleCreateChart();
 
-    this.apiService.connect$().subscribe({
-      next: msg => {
-        const data = JSON.parse(JSON.stringify(msg));
-        if(data.message == 'init') {
-          this.generalData = data;
-        } else if(data.message == 'historyGraph') {
-          this.historyGraph = data;
-          this.handleHistoryGraph();
-        }
-      }, error: err => {
-        console.log(err);
+    this.webSocketService.messages$.subscribe(data => {
+      if(data.message == 'init') {
+        this.generalData = data;
+      } else if(data.message == 'historyGraph') {
+        this.historyGraph = data;
+        this.handleHistoryGraph();
       }
     });
   }

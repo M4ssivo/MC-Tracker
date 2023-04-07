@@ -1,54 +1,57 @@
 <div class="servers" *ngIf="data">
 
     <div class="server-graph" *ngFor="let server of getSortenedByPlayers(data.servers); index as i">
-            <div class="server-icon">
-
-                <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="
-                {{ data.config.servers[server.server_id].name }}
-                {{ data.config.servers[server.server_id].ip }}
-                "
-                *ngIf="server.favicon">
-
-                <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="
-                {{ data.config.servers[server.server_id].name }}
-                {{ data.config.servers[server.server_id].ip }}
-                "
-                *ngIf="!server.favicon">
-
-                <span class="rank">#{{ i+1 }}</span>
-            </div>
-
-            <div class="server-status">
-                <h3 class="name">{{ data.config.servers[server.server_id].name }}</h3>
-
-                <div *ngIf="hasError(server); then handleError else handleChart"></div>
-
-                <ng-template #handleError>
-                    <span class="server-error">{{ server.error }}</span>
-                </ng-template>
-                
-                <ng-template #handleChart>
-
-                    <ng-template [ngIf]="isValid(server.playerCount)">
-                        <span class="highlighted-label" style="display: block;">
-                            Players: <span class="highlighted-value">{{ server.playerCount }}</span>
-                        </span>
-
-                        <span class="label" style="display: block;" *ngIf="server.graphPeakData">
-                            24h Peak: <span class="value" title="At {{ handleMoment(server.graphPeakData.timestamp * 1000, 'LTS') }}">{{ server.graphPeakData.playerCount }}</span>
-                        </span>
-                    </ng-template>
-                    <span class="label" style="display: block;">
-                        Record: <span class="value" title="At {{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY LTS') }}">{{ server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY') }})</span>
+        <div class="server-icon">
+        
+            <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="
+                        {{ data.config.servers[server.server_id].name }}
+                        {{ data.config.servers[server.server_id].ip }}
+                        " *ngIf="server.favicon">
+        
+            <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="
+                        {{ data.config.servers[server.server_id].name }}
+                        {{ data.config.servers[server.server_id].ip }}
+                        " *ngIf="!server.favicon">
+        
+            <span class="rank">#{{ i+1 }}</span>
+        </div>
+        
+        <div class="server-status">
+            <h3 class="name">{{ data.config.servers[server.server_id].name }}</h3>
+        
+            <div *ngIf="hasError(server); then handleError else handleChart"></div>
+        
+            <ng-template #handleError>
+                <span class="server-error">{{ server.error }}</span>
+            </ng-template>
+        
+            <ng-template #handleChart>
+        
+                <ng-template [ngIf]="isValid(server.playerCount)">
+                    <span class="highlighted-label" style="display: block;">
+                        Players: <span class="highlighted-value">{{ server.playerCount }}</span>
                     </span>
-
-                    <span class="label" style="display: block;">1.7.2-1.8</span>
+        
+                    <span class="label" style="display: block;" *ngIf="server.graphPeakData">
+                        24h Peak: <span class="value"
+                            title="At {{ handleMoment(server.graphPeakData.timestamp * 1000, 'LTS') }}">{{
+                            server.graphPeakData.playerCount }}</span>
+                    </span>
                 </ng-template>
-            </div>
-
-            <div class="chart">
-                <canvas baseChart [type]="'line'" [data]="getDataSet(server)" [options]="options" [legend]="false"></canvas>
-            </div>
+                <span class="label" style="display: block;">
+                    Record: <span class="value"
+                        title="At {{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY LTS') }}">{{
+                        server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY')
+                        }})</span>
+                </span>
+        
+                <span class="label" style="display: block;">1.7.2-1.8</span>
+            </ng-template>
+        </div>
+        
+        <div class="chart">
+            <canvas baseChart [type]="'line'" [data]="getDataSet(server)" [options]="options" [legend]="false"></canvas>
+        </div>
 
     </div>
 </div>

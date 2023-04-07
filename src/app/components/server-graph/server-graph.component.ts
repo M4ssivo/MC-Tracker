@@ -2,8 +2,8 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { Chart, ChartConfiguration, ChartOptions, registerables } from 'chart.js';
 import { GeneralData } from 'src/app/models/generaldata';
 import { ServerData } from 'src/app/models/serverdata';
-import { ApiService } from 'src/app/services/api.service';
 import * as moment from 'moment';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-server-graph',
@@ -31,32 +31,27 @@ export class ServerGraphComponent {
   };
 
   constructor(
-    private apiService: ApiService
+    private webSocketService: WebSocketService
   ) {
     Chart.register(...registerables);
   }
 
   ngOnInit() {
-    this.apiService.connect$().subscribe({
-      next: data => {
-        if(data.message == 'init') {
-          this.data = data;
+    this.webSocketService.messages$.subscribe(data => {
+      if(data.message == 'init') {
+        this.data = data;
 
-          this.data.servers.map((server, index) => (server.server_id = index)); // handle servers id
+        this.data.servers.map((server, index) => (server.server_id = index)); // handle servers id
 
-          this.data.timestampPoints = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
-        } else if(data.message == 'updateServers') {
+        this.data.timestampPoints = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
+      } else if(data.message == 'updateServers') {
 
-          this.data.timestampPoints.shift();
-          this.data.timestampPoints.push(data.timestamp * 1000);
+        this.data.timestampPoints.shift();
+        this.data.timestampPoints.push(data.timestamp * 1000);
 
-          for(let i = 1; i < data.updates.length; i++) {
-            this.handleServerUpdate(data, this.data.servers[i], i);
-          }
-
+        for(let i = 1; i < data.updates.length; i++) {
+          this.handleServerUpdate(data, this.data.servers[i], i);
         }
-      }, error: err => {
-        console.log(err);
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket';
-import { ApiService } from './services/api.service';
+import { WebSocketService } from './services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -11,18 +11,18 @@ export class AppComponent {
   title = 'Minecraft-Tracker';
 
   constructor(
-    private apiService: ApiService
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit() {
-    this.apiService.connect$().subscribe({
-      next: data => {
+    this.webSocketService.handleCreate();
+
+    this.webSocketService.messages$.subscribe(data => {
         if(data.message == 'init') {
-          this.apiService.connect$().next('requestHistoryGraph');
+          this.webSocketService.message('requestHistoryGraph');
         }
-      }, error: err => {
-        console.log(err);
+        console.log(data);
       }
-    });
+    );
   }
 }
