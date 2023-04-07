@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-overlay',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./overlay.component.css']
 })
 export class OverlayComponent {
-
+  @Input() overlayText!: string;
 }

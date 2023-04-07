@@ -9,6 +9,7 @@ import { WebSocketService } from './services/websocket.service';
 })
 export class AppComponent {
   title = 'Minecraft-Tracker';
+  showOverlay = true;
 
   constructor(
     private webSocketService: WebSocketService
@@ -21,8 +22,28 @@ export class AppComponent {
         if(data.message == 'init') {
           this.webSocketService.message('requestHistoryGraph');
         }
-        console.log(data);
       }
     );
+
+    this.webSocketService.connectionStatus$().subscribe(status => {
+      if(!status) {
+        this.showOverlay = true;
+      } else {
+        this.showOverlay = false;
+        this.webSocketService._message = '';
+      }
+    });
+  }
+
+  shouldShowOverlay() {
+    return this.hasError() && this.showOverlay;
+  }
+
+  getOverlayText() {
+    return this.webSocketService._message;
+  }
+
+  hasError() {
+    return this.webSocketService._message || this.webSocketService._message != '';
   }
 }

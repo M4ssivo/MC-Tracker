@@ -1,8 +1,16 @@
-<main class="main-section">
-  <app-general-graph></app-general-graph>
-  <app-server-graph></app-server-graph>
-</main>
+<div *ngIf="shouldShowOverlay(); then handleOverlay else handleCharts"></div>
 
-<footer class="footer">
-  <span>© Created by <a href="https://twitter.com/M4ssivo" target="__blank">Masivo</a>. 2023 All Rights Reserved.</span>
-</footer>
+<ng-template #handleOverlay>
+  <app-overlay [overlayText]="getOverlayText()"></app-overlay>
+</ng-template>
+
+<ng-template #handleCharts>
+  <main class="main-section">
+    <app-general-graph></app-general-graph>
+    <app-server-graph></app-server-graph>
+  </main>
+  
+  <footer class="footer">
+    <span>© Created by <a href="https://twitter.com/M4ssivo" target="__blank">Masivo</a>. 2023 All Rights Reserved.</span>
+  </footer>
+</ng-template>
