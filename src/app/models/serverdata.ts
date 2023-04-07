@@ -1,4 +1,6 @@
 export interface ServerData {
+    server_id: number
+    error: string
     favicon: string,
     graphPeakData: {
         playerCount: number,
