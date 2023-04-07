@@ -10,7 +10,7 @@ export class ApiService {
 
   constructor() { }
 
-  connect() {
+  connect$() {
     if (!this.subject) {
       this.subject = webSocket('wss://masivo.cc');
     }

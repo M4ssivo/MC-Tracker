@@ -1,6 +1,6 @@
 <div class="servers" *ngIf="data">
 
-    <div class="server-graph" *ngFor="let server of generalData.servers; index as i">
+    <div class="server-graph" *ngFor="let server of data.servers; index as i">
             <div class="server-icon">
                 <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="SagePvP sagepvp.org" *ngIf="server.favicon">
                 <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="SagePvP sagepvp.org" *ngIf="!server.favicon">
@@ -8,7 +8,7 @@
             </div>
 
             <div class="server-status" *ngIf="server.playerCount">
-                <h3 class="name">{{ generalData.config.servers[i].name }}</h3>
+                <h3 class="name">{{ data.config.servers[i].name }}</h3>
                 <span class="error" style="display: none;"></span>
 
                 <span class="highlighted-label" style="display: block;" >
@@ -27,7 +27,7 @@
             </div>
 
             <div class="chart">
-                <canvas baseChart [type]="'line'" [data]="getDataSet(server)" [options]="lineChartOptions" [legend]="false"></canvas>
+                <canvas baseChart [type]="'line'" [data]="getDataSet(server)" [options]="options" [legend]="false"></canvas>
             </div>
 
     </div>

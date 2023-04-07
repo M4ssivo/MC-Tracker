@@ -2,6 +2,9 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-moment';
 import * as moment from 'moment';
+import { GeneralData } from 'src/app/models/generaldata';
+import { HistoryGraph } from 'src/app/models/historygraph';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-general-graph',
@@ -12,16 +15,36 @@ export class GeneralGraphComponent {
 
   initialized = false;
 
-  @Input() generalData!: any;
-  @Input() graphData!: any;
+  generalData!: GeneralData;
+  historyGraph!: HistoryGraph;
 
   public chart: any;
 
-  constructor() {
+  constructor(
+    private apiService: ApiService
+  ) {
     Chart.register(...registerables);
   }
 
   ngOnInit() {
+    this.handleCreateChart();
+
+    this.apiService.connect$().subscribe({
+      next: msg => {
+        const data = JSON.parse(JSON.stringify(msg));
+        if(data.message == 'init') {
+          this.generalData = data;
+        } else if(data.message == 'historyGraph') {
+          this.historyGraph = data;
+          this.handleHistoryGraph();
+        }
+      }, error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  handleCreateChart() {
     this.chart = new Chart('general-graph', {
       type: 'line',
       data: {
@@ -47,18 +70,9 @@ export class GeneralGraphComponent {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  handleHistoryGraph() {
 
-    if(changes['graphData']) {
-      this.handleGeneralGraph();
-    }
-
-    //this.handleCharts();
-  }
-
-  handleGeneralGraph() {
-
-    if(!this.graphData) {
+    if(!this.historyGraph) {
       return;
     }
 
@@ -69,7 +83,7 @@ export class GeneralGraphComponent {
       dataset.push({
         label: this.generalData.config.servers[i].name,
         fill: true,
-        data: this.graphData.graphData[i],
+        data: this.historyGraph.graphData[i],
         borderColor: this.generalData.config.servers[i].color,
         backgroundColor: 'transparent',
         tension: 1,
@@ -81,16 +95,12 @@ export class GeneralGraphComponent {
     }
 
     let date: string[] = [];
-    this.graphData.timestamps.forEach((timestamp: number) => {
+    this.historyGraph.timestamps.forEach((timestamp: number) => {
       date.push(moment(timestamp * 1000).toString());
     });
 
     this.chart.data.datasets = dataset;
     this.chart.data.labels = date;
     this.chart.update();
-  }
-
-  handleCharts() {
-
   }
 }

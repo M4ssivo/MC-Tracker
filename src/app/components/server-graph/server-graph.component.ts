@@ -12,11 +12,9 @@ import * as moment from 'moment';
 })
 export class ServerGraphComponent {
 
-  @Input() generalData!: any;
-
   data!: GeneralData;
 
-  public lineChartOptions: ChartOptions<'line'> = {
+  public options: ChartOptions<'line'> = {
     spanGaps: true,
     normalized: true,
     animation: false,
@@ -39,9 +37,8 @@ export class ServerGraphComponent {
   }
 
   ngOnInit() {
-    this.apiService.connect().subscribe({
-      next: msg => {
-        const data = JSON.parse(JSON.stringify(msg));
+    this.apiService.connect$().subscribe({
+      next: data => {
         if(data.message == 'init') {
           this.data = data;
         }
