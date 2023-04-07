@@ -14,7 +14,7 @@
                 {{ data.config.servers[i].ip }}
                 "
                 *ngIf="!server.favicon">
-                
+
                 <span class="rank">#1</span>
             </div>
 
@@ -27,11 +27,11 @@
                 </span>
 
                 <span class="label" style="display: block;" *ngIf="server.graphPeakData.playerCount">
-                    24h Peak: <span class="value" title="At 4:16:04 PM">{{ server.graphPeakData.playerCount }}</span>
+                    24h Peak: <span class="value" title="At {{ handleMoment(server.graphPeakData.timestamp * 1000, 'LTS') }}">{{ server.graphPeakData.playerCount }}</span>
                 </span>
 
                 <span class="label" style="display: block;">
-                    Record: <span class="value" title="At 12/24/2021 6:38:29 PM">{{ server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY') }})</span>
+                    Record: <span class="value" title="At {{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY LTS') }}">{{ server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY') }})</span>
                 </span>
 
                 <span class="label" style="display: block;">1.7.2-1.8</span>
