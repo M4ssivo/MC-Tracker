@@ -105,7 +105,7 @@ export class ServerGraphComponent {
         {
           data: server.playerCountHistory,
           fill: true,
-          tension: 0.5,
+          tension: 0.1,
           borderColor: '#9d7bf6',
           backgroundColor: 'transparent',
           pointStyle: 'circle',
