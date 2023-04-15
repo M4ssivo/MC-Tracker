@@ -40,6 +40,22 @@ button {
     cursor: pointer;
 }
 
+/* -- SCROLLBAR -- */
+body::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: transparent;
+}
+
+body::-webkit-scrollbar {
+	width: 6px;
+	background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: var(--main);
+}
+
 /* -- MAIN SECTION -- */
 .main-section {
     height: auto;
