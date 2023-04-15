@@ -22,6 +22,11 @@ export class ServerGraphComponent {
     maintainAspectRatio: true,
     aspectRatio: 2.5,
     scales: {
+      y: {
+        ticks: {
+          precision: 0
+        }
+      },
       x: {
         type: 'time',
         time: {
@@ -54,7 +59,9 @@ export class ServerGraphComponent {
           return;
         }
 
-        this.timestamps.shift();
+        if(this.timestamps.length >= 16) {
+          this.timestamps.shift();
+        }
         this.timestamps.push(data.timestamp * 1000);
 
         for(let i = 1; i < data.updates.length; i++) {
@@ -94,7 +101,9 @@ export class ServerGraphComponent {
       }
     }
 
-    server.playerCountHistory.shift();
+    if(server.playerCountHistory.length >= 16) {
+      server.playerCountHistory.shift();
+    }
     server.playerCountHistory.push(data.updates[server_id].playerCount);
   }
 

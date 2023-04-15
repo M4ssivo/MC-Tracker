@@ -28,6 +28,7 @@ export class AppComponent {
     this.webSocketService.connectionStatus$().subscribe(status => {
       if(!status) {
         this.showOverlay = true;
+        this.webSocketService._message = 'Disconnected due to error.';
       } else {
         this.showOverlay = false;
         this.webSocketService._message = '';
