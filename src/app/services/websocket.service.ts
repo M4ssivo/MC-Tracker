@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer, Subject, timer, using, from, BehaviorSubject } from 'rxjs';
-import { filter, tap, map, take, switchMap, retryWhen, repeat, distinctUntilChanged, takeUntil, skip, } from 'rxjs/operators';
+import { Observable, Subject, timer, BehaviorSubject } from 'rxjs';
+import { filter, tap, map, take, switchMap, retryWhen, repeat, distinctUntilChanged, skip, } from 'rxjs/operators';
 import { webSocket } from 'rxjs/webSocket';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class WebSocketService {
   private status$: Subject<boolean> = new BehaviorSubject<boolean>(false);
   private ws: any;
 
-  _address: string = 'wss://masivo.cc'
+  _address: string = `wss://${environment.backend}`
   _reconnectDelayBase = 0;
   _message = 'Loading...';
 
