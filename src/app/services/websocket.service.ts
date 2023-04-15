@@ -33,8 +33,8 @@ export class WebSocketService {
   }
 
   private create() {
-    if (this.ws) {
-      //this.ws.unsubscribe();
+    if(this.ws) {
+      this.ws.unsubscribe();
     }
 
     const retryConnection = switchMap(() => {

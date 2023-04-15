@@ -113,7 +113,7 @@ export class GeneralGraphComponent {
 
   handleUpdate(data: any) {
 
-    if(!this.generalData && !this.historyGraph && !this.initialized) {
+    if(!this.generalData || !this.historyGraph || !this.initialized) {
       return;
     }
 

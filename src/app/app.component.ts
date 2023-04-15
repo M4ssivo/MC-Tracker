@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { webSocket } from 'rxjs/webSocket';
 import { WebSocketService } from './services/websocket.service';
 
 @Component({
@@ -11,17 +10,18 @@ export class AppComponent {
   title = 'Minecraft-Tracker';
   showOverlay = true;
 
-  constructor(
-    private webSocketService: WebSocketService
-  ) {}
+  constructor(private webSocketService: WebSocketService) {
+    this.handleLoad();
+  }
 
-  ngOnInit() {
+  handleLoad() {
     this.webSocketService.handleCreate();
 
     this.webSocketService.messages$.subscribe(data => {
         if(data.message == 'init') {
           this.webSocketService.message('requestHistoryGraph');
         }
+        console.log(data);
       }
     );
 
