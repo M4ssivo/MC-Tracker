@@ -3,12 +3,12 @@
     <div class="server-graph" *ngFor="let server of getSortenedByPlayers(data.servers); index as i">
         <div class="server-icon">
         
-            <img class="icon" src="https://masivo.cc{{ server.favicon }}" title="
+            <img class="icon" src="https://{{ getBackend() }}{{ server.favicon }}" title="
                         {{ data.config.servers[server.server_id].name }}
                         {{ data.config.servers[server.server_id].ip }}
                         " *ngIf="server.favicon">
         
-            <img class="icon" src="https://masivo.cc/missing_favicon.8d3eece1.svg" title="
+            <img class="icon" src="https://{{ getBackend() }}/missing_favicon.8d3eece1.svg" title="
                         {{ data.config.servers[server.server_id].name }}
                         {{ data.config.servers[server.server_id].ip }}
                         " *ngIf="!server.favicon">
@@ -34,14 +34,13 @@
         
                     <span class="label" style="display: block;" *ngIf="server.graphPeakData">
                         24h Peak: <span class="value"
-                            title="At {{ handleMoment(server.graphPeakData.timestamp * 1000, 'LTS') }}">{{
-                            server.graphPeakData.playerCount }}</span>
+                            title="At {{ handleDate(server.graphPeakData.timestamp * 1000) | date: 'h:mm a' }}">{{ server.graphPeakData.playerCount }}</span>
                     </span>
                 </ng-template>
                 <span class="label" style="display: block;">
                     Record: <span class="value"
-                        title="At {{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY LTS') }}">{{
-                        server.recordData.playerCount }} ({{ handleMoment(server.recordData.timestamp * 1000, 'DD/MM/YYYY')
+                        title="At {{ handleDate(server.recordData.timestamp * 1000) | date: 'dd/MM/yyyy h:mm a' }}">{{
+                        server.recordData.playerCount }} ({{ handleDate(server.recordData.timestamp * 1000) | date: 'dd/MM/YYYY'
                         }})</span>
                 </span>
         

@@ -1,7 +1,5 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import 'chartjs-adapter-moment';
-import * as moment from 'moment';
 import { GeneralData } from 'src/app/models/generaldata';
 import { HistoryGraph } from 'src/app/models/historygraph';
 import { WebSocketService } from 'src/app/services/websocket.service';
@@ -62,14 +60,7 @@ export class GeneralGraphComponent {
         animation: false,
         maintainAspectRatio: true,
         aspectRatio: 2.5,
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'hour'
-            }
-          }
-        }
+        
       },
       
     });
@@ -101,7 +92,7 @@ export class GeneralGraphComponent {
 
     let date: string[] = [];
     this.historyGraph.timestamps.forEach((timestamp: number) => {
-      date.push(moment(timestamp * 1000).toString());
+      date.push(new Date(timestamp * 1000).toLocaleTimeString());
     });
 
     this.chart.data.datasets = dataset;
@@ -118,7 +109,7 @@ export class GeneralGraphComponent {
     }
 
     this.chart.data.labels.shift();
-    this.chart.data.labels.push(moment(data.timestamp * 1000).toString());
+    this.chart.data.labels.push(new Date(data.timestamp * 1000).toLocaleTimeString());
 
     for(let i = 1; i < data.updates.length; i++) {
       this.chart.data.datasets[i].data.shift();

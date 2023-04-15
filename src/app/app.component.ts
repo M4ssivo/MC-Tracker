@@ -21,14 +21,15 @@ export class AppComponent {
         if(data.message == 'init') {
           this.webSocketService.message('requestHistoryGraph');
         }
-        console.log(data);
       }
     );
 
     this.webSocketService.connectionStatus$().subscribe(status => {
       if(!status) {
         this.showOverlay = true;
-        this.webSocketService._message = 'Disconnected due to error.';
+        if(!this.hasError()) {
+          this.webSocketService._message = 'Disconnected due to error.';
+        }
       } else {
         this.showOverlay = false;
         this.webSocketService._message = '';

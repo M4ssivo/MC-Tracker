@@ -1,9 +1,9 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { Chart, ChartConfiguration, ChartOptions, registerables } from 'chart.js';
+import { Component } from '@angular/core';
+import { Chart, ChartOptions, registerables } from 'chart.js';
 import { GeneralData } from 'src/app/models/generaldata';
 import { ServerData } from 'src/app/models/serverdata';
-import * as moment from 'moment';
 import { WebSocketService } from 'src/app/services/websocket.service';
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-server-graph',
@@ -13,7 +13,7 @@ import { WebSocketService } from 'src/app/services/websocket.service';
 export class ServerGraphComponent {
 
   data!: GeneralData;
-  timestamps: number[] = [];
+  timestamps: string[] = [];
 
   public options: ChartOptions<'line'> = {
     spanGaps: true,
@@ -28,9 +28,8 @@ export class ServerGraphComponent {
         }
       },
       x: {
-        type: 'time',
-        time: {
-          unit: 'hour'
+        ticks: {
+          display: false
         }
       }
     }
@@ -52,7 +51,7 @@ export class ServerGraphComponent {
 
         this.data.servers.map((server, index) => (server.server_id = index)); // handle servers id
 
-        this.timestamps = this.data.timestampPoints.map(secs => secs * 1000); // change seconds to milliseconds
+        this.timestamps = this.data.timestampPoints.map(secs => new Date(secs * 1000).toLocaleTimeString()); // change seconds to milliseconds
       } else if(data.message == 'updateServers') {
 
         if(!data) { // check if has any data
@@ -62,7 +61,7 @@ export class ServerGraphComponent {
         if(this.timestamps.length >= 16) {
           this.timestamps.shift();
         }
-        this.timestamps.push(data.timestamp * 1000);
+        this.timestamps.push(new Date(data.timestamp * 1000).toLocaleTimeString());
 
         for(let i = 1; i < data.updates.length; i++) {
           this.handleServerUpdate(data, this.data.servers[i], i);
@@ -126,6 +125,10 @@ export class ServerGraphComponent {
     }
   }
 
+  getBackend() {
+    return environment.backend;
+  }
+
   getSortenedByPlayers(servers: ServerData[]) {
     return [...servers].sort((a, b) => this.getPlayerCount(b.playerCount) - this.getPlayerCount(a.playerCount));
   }
@@ -134,8 +137,8 @@ export class ServerGraphComponent {
     return count == null ? 0 : count;
   }
 
-  handleMoment(time: any, format: string) {
-    return moment(time).format(format);
+  handleDate(time: any) {
+    return new Date(time);
   }
 
   isValid(count: number) {
